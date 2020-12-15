@@ -14,7 +14,6 @@ import odoo
 import logging
 from odoo.tools.translate import _
 from odoo.addons.http_routing.models.ir_http import slug
-from odoo.addons.sale.controllers.variant import VariantController
 from odoo.addons.website.controllers.main import QueryURL
 from odoo.addons.website_sale.controllers.main import TableCompute
 from odoo.addons.website_sale_wishlist.controllers.main import WebsiteSale

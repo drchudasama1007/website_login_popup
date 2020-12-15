@@ -5,7 +5,7 @@ import json
 import werkzeug.urls
 import werkzeug.utils
 from odoo.http import request
-from odoo.tools import image_process
+
 
 import odoo
 from odoo import fields, models, http

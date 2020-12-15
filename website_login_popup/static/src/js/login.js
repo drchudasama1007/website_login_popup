@@ -1,26 +1,15 @@
-odoo.define('website_login_popup.popup', function(require) {
-    'use strict';
+odoo.define('website_login_popup.login', function (require) {
+'use strict';
 
-    var sAnimations = require('website.content.snippets.animation');
-    var publicWidget = require('web.public.widget');
-    var Widget = require('web.Widget');
-    var core = require('web.core');
-    var _t = core._t
-    var ajax = require('web.ajax');
-    var config = require('web.config');
-//    var sale = new sAnimations.registry.WebsiteSale();
+var sAnimations = require('website.content.snippets.animation');
+var rpc = require('web.rpc');
+var core = require('web.core');
+var ajax = require('web.ajax');
+var _t = core._t;
 
-    sAnimations.registry.reset_password_popup = sAnimations.Class.extend({
-        selector: "#wrapwrap",
-        start: function () {
-            console.log("start function=========================")
-            self = this;
-            self.customerLogin();
-            self.customerRegistration();
-        },
+$(document).ready(function(){
 
-        resetPassword: function(){
-            $("#loginRegisterPopup .oe_reset_password_form").submit(function(e) {
+    $("#loginRegisterPopup .oe_reset_password_form").submit(function(e) {
                 var $form = $('#loginRegisterPopup .oe_reset_password_form');
                 e.preventDefault();
                 var url = '/web/reset_password?'+$form.serialize();
@@ -28,6 +17,7 @@ odoo.define('website_login_popup.popup', function(require) {
                     url: url,
                     type: 'POST',
                     success: function(data) {
+
                         var oe_reset_password_form_error = $(data).find('.te_reset_password_form').find('.alert.alert-danger').html();
                         var oe_reset_password_form_success  = $(data).find('main .oe_website_login_container').find('.alert.alert-success').html();
                         if($(data).find('.te_reset_password_form').find('.alert.alert-danger').length) {
@@ -39,17 +29,15 @@ odoo.define('website_login_popup.popup', function(require) {
                     },
                 });
             });
-        },
 
-        customerLogin: function(){
             $(".login_signup_form").submit(function(e) {
-
                 var $form = $('.login_signup_form');
                 e.preventDefault();
                 var email = $form.find('#login').val();
                 var pass = $form.find('#password').val();
                 console.log("Form Submit Thyu===============",email,pass)
                 ajax.jsonRpc('/web/login_custom', 'call', {'login':email,'password':pass}).then(function(data) {
+                    console.log("===========login_signup_form",data)
                     if(!data.login_success){
                         $(".login_signup_form .te_error-success").replaceWith("<div class='te_error-success alert alert-danger mt16 mb16 mx-3 text-left'>" + data.error + "</div>");
                     }
@@ -62,18 +50,14 @@ odoo.define('website_login_popup.popup', function(require) {
                     }
                 });
             });
-        },
 
-        customerRegistration: function(){
             $(".register_signup_form").submit(function(e) {
-                console.log("register_signup_form===================")
                 var $form = $('.register_signup_form');
                 e.preventDefault();
                 var email = $form.find('#login').val();
                 var name = $form.find('#name').val();
                 var password = $form.find('#password').val();
                 var confirm_password = $form.find('#confirm_password').val();
-                console.log("register_signup_form======value=============",email,name,password,confirm_password)
                 ajax.jsonRpc('/web/signup_custom', 'call', {'login':email,'name':name,'password':password,'confirm_password':confirm_password,'redirect':'','token':''}).then(function(data) {
 
 
@@ -84,13 +68,8 @@ odoo.define('website_login_popup.popup', function(require) {
                     }
                 });
             });
-        },
 
-    });
-
-    $(document).ready(function() {
-
-        $(document).on('click', '.login', function(){
+            $(document).on('click', '.login', function(){
             $('#login_form').show();
             $('#signup_form').hide();
             $('.login').css('border-bottom', '1px solid black');
@@ -103,7 +82,6 @@ odoo.define('website_login_popup.popup', function(require) {
             $('.signup').css('border-bottom', '1px solid black');
             $('.login').css('border-bottom', '1px solid white');
         });
-
-    })
+})
 
 })
